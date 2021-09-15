@@ -9,3 +9,8 @@ export const kRegisterHeader = "Create a new account";
 export const kRegisterSubHead =
   "Join with your valid credentials to gain access to this platform";
 // endregion
+
+// region firebase
+export const kProjectName = "iot-admin-pwa";
+
+// endregion
