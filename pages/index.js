@@ -1,9 +1,9 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ItemLoader from "../components/loader";
 import { kAppName } from "../utils/constants";
-import firebase from "firebase/app";
+import { currentUser } from "firebase/auth";
 import "firebase/auth";
 import { useRouter } from "next/dist/client/router";
 
@@ -14,7 +14,7 @@ export default function Home() {
   // called when page is first loaded
   useEffect(async () => {
     // check user authentication state
-    let currentUser = firebase.auth().currentUser;
+
     if (currentUser) router.push("/dashboard");
     else router.push("/login");
   }, []);

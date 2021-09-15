@@ -18,7 +18,16 @@ function AdminDashboardPage({ feeds }) {
   // threshold
   const threshold = 3.0;
 
-  return <div></div>;
+  return (
+    <div>
+      <Head>
+        <title>{kAppName}</title>
+        <meta name="description" content="For a final yer project demo" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div>Dashboard</div>;
+    </div>
+  );
 }
 
 export default AdminDashboardPage;
