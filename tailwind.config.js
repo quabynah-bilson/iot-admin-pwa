@@ -25,7 +25,7 @@ module.exports = {
         DEFAULT: "#936fa9",
       },
       background: {
-        DEFAULT: "#f5edf4",
+        DEFAULT: "#e1e1e5",
       },
       black: colors.black,
       white: colors.white,

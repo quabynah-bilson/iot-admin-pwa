@@ -91,7 +91,7 @@ function CreateAccountPage() {
   };
 
   return (
-    <div>
+    <div className="bg-background w-screen min-h-screen">
       <Head>
         <title>{kAppName}</title>
         <meta name="description" content="For a final year project demo" />
@@ -104,7 +104,7 @@ function CreateAccountPage() {
       ) : (
         <>
           {showForm ? (
-            <div className="relative min-h-screen flex flex-col justify-center items-center bg-background">
+            <div className="relative min-h-screen flex flex-col justify-center items-center">
               <div className="relative max-w-xs sm:max-w-sm 2xl:max-w-xl w-full">
                 <div className="card bg-secondary shadow-lg  w-full h-full rounded-3xl absolute  transform -rotate-6"></div>
                 <div className="card bg-tertiary shadow-lg  w-full h-full rounded-3xl absolute  transform rotate-6"></div>
