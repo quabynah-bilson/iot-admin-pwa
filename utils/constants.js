@@ -20,5 +20,8 @@ export const kMessagingPublicKey =
 // endregion
 
 // region paystack
-export const kPaystackApiKey = "pk_";
+export const kPaystackApiKey =
+  "pk_test_fabdabefeb843c8a8d42a34a751e111ea0fa570c";
+export const kPaystackApiSecret =
+  "sk_test_25ec05192717fcda203d6d4b46e79428c20059ad";
 // endregion

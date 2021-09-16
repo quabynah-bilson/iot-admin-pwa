@@ -5,6 +5,7 @@ import {
   kRegisterHeader,
   kRegisterSubHead,
   kUsersRef,
+  kUserType,
 } from "../utils/constants";
 import Head from "next/head";
 import Link from "next/link";
@@ -64,12 +65,14 @@ function CreateAccountPage() {
         );
         let user = credential.user;
         if (user) {
+          let username = firstName.toLowerCase() + "_" + lastName.toLowerCase();
           let docRef = doc(getFirestore(), kUsersRef, user.uid);
           let userData = {
             id: docRef.id,
             email: user.email,
             firstName,
             lastName,
+            username,
             phone,
             userType,
             created_at: new Date().getTime(),

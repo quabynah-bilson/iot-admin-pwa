@@ -285,6 +285,7 @@ module.exports = {
         "serif",
       ],
       mono: [
+        "Open Sans",
         "ui-monospace",
         "SFMono-Regular",
         "Menlo",
