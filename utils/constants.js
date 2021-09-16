@@ -1,5 +1,6 @@
 export const kAppName = "IoT Admin";
 export const kApiKey = "PD7E235IZN468BKG";
+export const kUserType = "user-type";
 
 // region authentication
 export const kLoginHeader = "Sign in to get started";
