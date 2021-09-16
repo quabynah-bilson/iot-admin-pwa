@@ -16,29 +16,26 @@ export async function getStaticProps(context) {
   let feeds = await response.json();
   console.log(feeds);
 
-  // get users
-  let snapshots = await getDocs(query(collection(getFirestore(), kUsersRef)));
-  let users = snapshots.docs.map((doc) => doc.data()) || [];
-
   return {
-    props: {
-      feeds,
-      users,
-    },
+    props: { feeds },
   };
 }
 
-function AdminDashboardPage({ feeds, users }) {
+function AdminDashboardPage({ feeds }) {
   // states
   const [currentPage, setCurrentPage] = useState(0);
+  const [users, setUsers] = useState([]);
+
   const pages = ["Users", "Payments"];
 
   // threshold
   const threshold = 3.0;
 
   useEffect(async () => {
-    let messaging = getMessaging();
-
+    // get users
+    let snapshots = await getDocs(query(collection(getFirestore(), kUsersRef)));
+    let data = snapshots.docs.map((doc) => doc.data()) || [];
+    setUsers(data);
     return null;
   }, []);
 
@@ -58,7 +55,7 @@ function AdminDashboardPage({ feeds, users }) {
 
           {/* navigation bar */}
           <div className="bg-white mt-8">
-            <nav class="flex flex-col sm:flex-row">
+            <nav className="flex flex-col sm:flex-row">
               {pages.map((value, index) => (
                 <button
                   onClick={() => setCurrentPage(index)}

@@ -2,11 +2,10 @@ import { initializeApp, getApps } from "firebase/app";
 // import admin from "firebase-admin";
 // import serviceAccount from "./service.account.json";
 import { kProjectName } from "./constants";
-import {
-  getMessaging,
-  onMessage,
-  // onBackgroundMessage,
-} from "firebase/messaging";
+// import {
+//   getMessaging,
+//   onMessage,
+// } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBJ5AmVi7uWaftrPRbL7L8cAcJ-8LDBUGM",
@@ -31,20 +30,20 @@ const firebaseConfig = {
 if (typeof window !== "undefined" && !getApps().length) {
   initializeApp(firebaseConfig);
 
-  // Retrieve firebase messaging
-  const messaging = getMessaging();
+  // // Retrieve firebase messaging
+  // const messaging = getMessaging();
 
-  // handle foreground messages
-  onMessage(messaging, (payload) => {
-    console.log("Received message ", payload);
+  // // handle foreground messages
+  // onMessage(messaging, (payload) => {
+  //   console.log("Received message ", payload);
 
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-      body: payload.notification.body,
-    };
+  //   const notificationTitle = payload.notification.title;
+  //   const notificationOptions = {
+  //     body: payload.notification.body,
+  //   };
 
-    self.registration.showNotification(notificationTitle, notificationOptions);
-  });
+  //   self.registration.showNotification(notificationTitle, notificationOptions);
+  // });
 
   // handle background messages
   // onBackgroundMessage(messaging, (payload) => {

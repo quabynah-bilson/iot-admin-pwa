@@ -18,3 +18,7 @@ export const kMessagingPublicKey =
   "BGBzUsOJBUykFn2VtdKSDMiPMO4_4Gx9xE7Wf03k5NkAyUGSepeoUZVe2S0_8cuw_b5F3GDEO0tMBamN3JQN_Y4";
 
 // endregion
+
+// region paystack
+export const kPaystackApiKey = "pk_";
+// endregion
