@@ -32,11 +32,17 @@ function AdminDashboardPage({ feeds }) {
   // threshold
   const threshold = 3.0;
 
-  useEffect(async () => {
-    // get users
-    let snapshots = await getDocs(query(collection(getFirestore(), kUsersRef)));
-    let data = snapshots.docs.map((doc) => doc.data()) || [];
-    setUsers(data);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      // get users
+      let snapshots = await getDocs(
+        query(collection(getFirestore(), kUsersRef))
+      );
+      let data = snapshots.docs.map((doc) => doc.data()) || [];
+      setUsers(data);
+    };
+
+    fetchUsers();
     return null;
   }, []);
 
@@ -76,7 +82,6 @@ function AdminDashboardPage({ feeds }) {
           {currentPage === 0 ? (
             <>
               {/* table of users */}
-
               <section className="w-full p-6 font-mono">
                 <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
                   <div className="w-full overflow-x-auto sm:overflow-x-hidden">
