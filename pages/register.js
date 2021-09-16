@@ -1,18 +1,28 @@
 import { useState } from "react";
 import {
   kAppName,
+  kMessagingPublicKey,
   kRegisterHeader,
   kRegisterSubHead,
+  kUsersRef,
 } from "../utils/constants";
 import Head from "next/head";
 import Link from "next/link";
 import ItemLoader from "../components/loader";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { doc, getFirestore, setDoc } from "firebase/firestore/lite";
+import { useRouter } from "next/dist/client/router";
 
 function CreateAccountPage() {
+  // router
+  const router = useRouter();
+
   // form state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
 
   // create new user
@@ -22,6 +32,10 @@ function CreateAccountPage() {
       alert("Email address is required");
     } else if (password === "") {
       alert("Password is required");
+    } else if (lastName === "") {
+      alert("Last name is required");
+    } else if (firstName === "") {
+      alert("First name is required");
     } else {
       try {
         setLoading(true);
@@ -32,6 +46,17 @@ function CreateAccountPage() {
         );
         let user = credential.user;
         if (user) {
+          let docRef = doc(getFirestore(), kUsersRef, user.uid);
+          let userData = {
+            id: docRef.id,
+            email: user.email,
+            firstName,
+            lastName,
+            phone,
+            created_at: new Date().getTime(),
+          };
+          console.log(userData);
+          await setDoc(docRef, userData, { merge: true });
           router.push("/dashboard");
         } else {
           setLoading(false);
@@ -48,7 +73,7 @@ function CreateAccountPage() {
     <div>
       <Head>
         <title>{kAppName}</title>
-        <meta name="description" content="For a final yer project demo" />
+        <meta name="description" content="For a final year project demo" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {loading ? (
@@ -74,25 +99,61 @@ function CreateAccountPage() {
                   action="#"
                   className="mt-10"
                 >
+                  {/* first name */}
                   <div>
+                    <input
+                      type="text"
+                      placeholder="First Name"
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="form_control"
+                      required={true}
+                    />
+                  </div>
+
+                  {/* last name */}
+                  <div className="mt-4">
+                    <input
+                      type="text"
+                      placeholder="Last Name"
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="form_control"
+                      required={true}
+                    />
+                  </div>
+
+                  {/* phone number */}
+                  <div className="mt-4">
+                    <input
+                      type="text"
+                      placeholder="Phone Number"
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      className="form_control"
+                    />
+                  </div>
+
+                  {/* email */}
+                  <div className="mt-4">
                     <input
                       type="email"
                       placeholder="Email address"
                       onChange={(e) => setEmail(e.target.value)}
                       className="form_control"
+                      required={true}
                     />
                   </div>
 
-                  <div className="mt-7">
+                  {/* password */}
+                  <div className="mt-4">
                     <input
                       type="password"
                       placeholder="Password"
                       onChange={(e) => setPassword(e.target.value)}
                       className="form_control"
+                      required={true}
                     />
                   </div>
 
-                  <div className="mt-7 flex">
+                  <div className="mt-6 flex">
                     <div className="w-full text-right">
                       <Link href="/login">
                         <a

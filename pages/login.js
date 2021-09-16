@@ -51,7 +51,7 @@ function LoginPage() {
     <div>
       <Head>
         <title>{kAppName}</title>
-        <meta name="description" content="For a final yer project demo" />
+        <meta name="description" content="For a final year project demo" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {loading ? (

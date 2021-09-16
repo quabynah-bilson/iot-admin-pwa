@@ -1,7 +1,12 @@
 import { initializeApp, getApps } from "firebase/app";
 // import admin from "firebase-admin";
-import { kProjectName } from "./constants";
 // import serviceAccount from "./service.account.json";
+import { kProjectName } from "./constants";
+import {
+  getMessaging,
+  onMessage,
+  // onBackgroundMessage,
+} from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBJ5AmVi7uWaftrPRbL7L8cAcJ-8LDBUGM",
@@ -25,6 +30,33 @@ const firebaseConfig = {
 // Check that `window` is in scope for the analytics module!
 if (typeof window !== "undefined" && !getApps().length) {
   initializeApp(firebaseConfig);
+
+  // Retrieve firebase messaging
+  const messaging = getMessaging();
+
+  // handle foreground messages
+  onMessage(messaging, (payload) => {
+    console.log("Received message ", payload);
+
+    const notificationTitle = payload.notification.title;
+    const notificationOptions = {
+      body: payload.notification.body,
+    };
+
+    self.registration.showNotification(notificationTitle, notificationOptions);
+  });
+
+  // handle background messages
+  // onBackgroundMessage(messaging, (payload) => {
+  //   console.log("Received background message ", payload);
+
+  //   const notificationTitle = payload.notification.title;
+  //   const notificationOptions = {
+  //     body: payload.notification.body,
+  //   };
+
+  //   self.registration.showNotification(notificationTitle, notificationOptions);
+  // });
 }
 
 // Check that `window` is in scope for the analytics module!
