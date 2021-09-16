@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans&family=Rubik&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins&family=Rubik&display=swap");
 
 /* loader */
 .loader,
@@ -27,7 +27,7 @@
 .loader:before {
   width: 5.2em;
   height: 10.2em;
-  background: #212121;
+  background: #552ebd;
   border-radius: 10.2em 0 0 10.2em;
   top: -0.1em;
   left: -0.1em;
@@ -39,7 +39,7 @@
 .loader:after {
   width: 5.2em;
   height: 10.2em;
-  background: #212121;
+  background: #552ebd;
   border-radius: 0 10.2em 10.2em 0;
   top: -0.1em;
   left: 4.9em;
@@ -73,3 +73,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* forms */
+.form_control {
+  @apply mt-1 block w-full px-4 py-3 border-none bg-gray-100 rounded-xl shadow-lg hover:bg-gray-200 focus:bg-gray-100 focus:ring-gray-100;
+}
+/* end of forms */

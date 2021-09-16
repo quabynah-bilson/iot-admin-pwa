@@ -27,9 +27,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex flex-col justify-center items-center w-full h-full">
-        <ItemLoader />
-      </div>
+      <ItemLoader />
     </div>
   );
 }

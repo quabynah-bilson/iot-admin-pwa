@@ -25,7 +25,7 @@ function AdminDashboardPage({ feeds }) {
         <meta name="description" content="For a final yer project demo" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>Dashboard</div>;
+      <div>Dashboard</div>
     </div>
   );
 }
