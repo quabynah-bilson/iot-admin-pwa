@@ -66,6 +66,7 @@ function AdminDashboardPage({ feeds }) {
               {pages.map((value, index) => (
                 <button
                   onClick={() => setCurrentPage(index)}
+                  key={index}
                   className={`${
                     currentPage === index
                       ? "text-primary border-primary border-b-2"

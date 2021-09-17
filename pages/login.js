@@ -1,6 +1,8 @@
 import { useState } from "react";
 import {
+  kAdminUserType,
   kAppName,
+  kClientUserType,
   kLoginHeader,
   kLoginSubHead,
   kUsersRef,
@@ -17,12 +19,12 @@ import { MdSupervisorAccount } from "react-icons/md";
 
 export const accountTypes = [
   {
-    name: "Administrator",
+    name: kAdminUserType,
     desc: "Gain full access over the system",
     Icon: RiAdminLine,
   },
   {
-    name: "Customer",
+    name: kClientUserType,
     desc: "View personal information",
     Icon: MdSupervisorAccount,
   },
@@ -61,7 +63,9 @@ function LoginPage() {
           let userData = await getDoc(docRef);
           if (userData.exists && userData.data()["userType"] === userType) {
             localStorage.setItem(kUserType, userType);
-            router.push("/dashboard");
+            if (userType === kAdminUserType.toLowerCase())
+              router.push("/dashboard");
+            else router.push("/client.dashboard");
           } else {
             setLoading(false);
             alert(`The user type does not match the account details.`);

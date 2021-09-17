@@ -1,6 +1,8 @@
 import { useState } from "react";
 import {
+  kAdminUserType,
   kAppName,
+  kClientUserType,
   kMessagingPublicKey,
   kRegisterHeader,
   kRegisterSubHead,
@@ -18,12 +20,12 @@ import { MdSupervisorAccount } from "react-icons/md";
 
 export const accountTypes = [
   {
-    name: "Administrator",
+    name: kAdminUserType,
     desc: "Gain full access over the system",
     Icon: RiAdminLine,
   },
   {
-    name: "Customer",
+    name: kClientUserType,
     desc: "View personal information",
     Icon: MdSupervisorAccount,
   },
@@ -81,7 +83,9 @@ function CreateAccountPage() {
 
           await setDoc(docRef, userData, { merge: true });
           localStorage.setItem(kUserType, userType);
-          router.push("/dashboard");
+          if (userType === kAdminUserType.toLowerCase())
+            router.push("/dashboard");
+          else router.push("/client.dashboard");
         } else {
           setLoading(false);
           alert(`An error occurred. ${error.message}`);
