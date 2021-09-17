@@ -24,6 +24,7 @@ function PaymentListItem({ info, allowClick }) {
               { ...info, status: kPaymentCompletedState },
               { merge: true }
             );
+            alert("Garbage collected successfully");
           }
         };
 

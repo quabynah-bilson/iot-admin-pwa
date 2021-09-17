@@ -3,10 +3,20 @@ import { useEffect, useState } from "react";
 import {
   kAppName,
   kClientUserType,
+  kPaymentCompletedState,
+  kPaymentsRef,
   kUsersRef,
   kUserType,
 } from "../utils/constants";
-import { getDoc, doc, getFirestore } from "firebase/firestore/lite";
+import {
+  getDoc,
+  doc,
+  getFirestore,
+  onSnapshot,
+  where,
+  query,
+  collection,
+} from "firebase/firestore";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
 import { useRouter } from "next/router";
 import LogoutButton from "../components/logout.button";
@@ -46,12 +56,25 @@ function ClientDashboardPage({ feeds }) {
 
   // get payment info for user
   const fetchHistory = async () => {
-    let paymentResponse = await fetch("http://localhost:3000/api/payments", {
-      body: { user: currentUser.id },
-      method: "POST",
-    });
-    let data = await paymentResponse.json();
-    setPaymentItems(data);
+    onSnapshot(
+      query(
+        collection(getFirestore(), kPaymentsRef),
+        where("client", "==", getAuth().currentUser.uid)
+      ),
+      (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (
+            change.type === "modified" &&
+            change.doc.exists &&
+            change.doc.data()["status"] === kPaymentCompletedState
+          ) {
+            toast("Garbage collected successfully");
+          }
+        });
+        let data = snapshot.docs.map((doc) => doc.data());
+        setPaymentItems(data);
+      }
+    );
   };
 
   // check user login status

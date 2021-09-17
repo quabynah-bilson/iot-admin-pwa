@@ -4,17 +4,24 @@ import { useEffect, useState } from "react";
 import {
   kAdminUserType,
   kAppName,
+  kPaymentsRef,
   kUsersRef,
   kUserType,
 } from "../utils/constants";
 
-import { getDoc, doc, getFirestore } from "firebase/firestore/lite";
+import {
+  getDoc,
+  doc,
+  getFirestore,
+  collection,
+  query,
+  onSnapshot,
+} from "firebase/firestore";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
 import { useRouter } from "next/router";
 import UserCard from "../components/user.card";
 import LogoutButton from "../components/logout.button";
 import EmptyContent from "../components/empty.content";
-import ItemLoader from "../components/loader";
 import PaymentListItem from "../components/payment.list.item";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -51,9 +58,10 @@ function AdminDashboardPage({ feeds, users }) {
 
   // get payment info for user
   const fetchHistory = async () => {
-    let paymentResponse = await fetch("http://localhost:3000/api/payments");
-    let data = await paymentResponse.json();
-    setPaymentItems(data);
+    onSnapshot(query(collection(getFirestore(), kPaymentsRef)), (snapshot) => {
+      let data = snapshot.docs.map((doc) => doc.data());
+      setPaymentItems(data);
+    });
   };
 
   useEffect(() => {

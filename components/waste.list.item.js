@@ -18,10 +18,14 @@ import {
 } from "firebase/firestore/lite";
 import { onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
 
 // list item for waste
-function WasteListItem({ feed, user, showPaymentOption = false }) {
+function WasteListItem({
+  feed,
+  user,
+  showPaymentOption = false,
+  onUpdateComplete,
+}) {
   // states
   const [hasPaid, setHasPaid] = useState(false);
   const db = getFirestore();
@@ -57,7 +61,8 @@ function WasteListItem({ feed, user, showPaymentOption = false }) {
         { merge: true }
       );
     } else {
-      alert("Failed to complete the transaction successfully");
+      if (onUpdateComplete)
+        onUpdateComplete("Failed to complete the transaction successfully");
     }
   };
 
@@ -78,30 +83,25 @@ function WasteListItem({ feed, user, showPaymentOption = false }) {
       );
 
       let querySnapshots = await getDocs(q);
-
-      console.log(querySnapshots.docs.map((doc) => doc.data()));
       const transactions = querySnapshots.docs.map((doc) => doc.data());
-
       console.log(`Transactions for user: ${user.id}`, transactions.join(", "));
       setHasPaid(transactions.length > 0);
+
+      // onSnapshot(q, (querySnapshots) => {
+      //   const transactions = querySnapshots.docs.map((doc) => doc.data());
+      //   console.log(
+      //     `Transactions for user: ${user.id}`,
+      //     transactions.join(", ")
+      //   );
+      //   setHasPaid(transactions.length > 0);
+      // });
     };
     fetchFeedPaymentState();
     return null;
-  }, []);
+  }, [user, feed]);
 
   return (
     <>
-      {/* <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      /> */}
       <tr className="text-gray-700 cursor-pointer">
         <td className="px-4 py-3 border">
           <div className="flex items-center text-sm">

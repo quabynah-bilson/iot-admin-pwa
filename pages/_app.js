@@ -18,7 +18,8 @@ function MyApp({ Component, pageProps }) {
         (snapshot) => {
           snapshot.docChanges().forEach((change) => {
             if (change.type === "added") {
-              toast("New request received from a client");
+              console.log("new item added to payments");
+              // toast("New request received from a client");
             }
           });
         }
@@ -39,7 +40,6 @@ function MyApp({ Component, pageProps }) {
         rtl={false}
         pauseOnFocusLoss
         draggable
-        pauseOnHover
       />
       <Component {...pageProps} />
     </>
