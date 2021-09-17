@@ -1,4 +1,5 @@
 const withOffline = require("next-offline");
+const withPWA = require("next-pwa");
 
 const nextConfig = {
   eslint: {
@@ -14,6 +15,9 @@ const nextConfig = {
   generateInDevMode: true,
 
   workboxOpts: {
+    pwa: {
+      dest: "public",
+    },
     swDest: "static/service-worker.js",
     runtimeCaching: [
       {
@@ -35,4 +39,5 @@ const nextConfig = {
   },
 };
 
-module.exports = withOffline(nextConfig);
+// module.exports = withOffline(nextConfig);
+module.exports = withPWA(nextConfig);

@@ -207,7 +207,7 @@ function ClientDashboardPage() {
           )}
           {currentPage === 1 && (
             <>
-              {loading && <ItemLoader />}
+              {/* {loading && <ItemLoader />} */}
 
               {updatedFeeds.length ? (
                 <section className="w-full p-6 font-mono">
