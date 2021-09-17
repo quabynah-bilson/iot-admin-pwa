@@ -1,4 +1,5 @@
 import { format, parseISO } from "date-fns";
+import { FaMoneyCheck } from "react-icons/fa";
 
 // list item for waste
 function WasteListItem({ feed, showPaymentOption = false }) {
@@ -24,11 +25,16 @@ function WasteListItem({ feed, showPaymentOption = false }) {
       </td>
       <td className="px-4 py-3 text-xs border">
         {showPaymentOption && (
-          <span
-            className={`text-secondary bg-secondary px-2 py-1 font-semibold leading-tight rounded-sm bg-opacity-10`}
+          <button
+            className="flex flex-row items-center space-x-2 px-6 py-2 border-2 border-primary font-semibold text-primary rounded-full cursor-pointer"
+            onClick={() => {
+              //   let data = PayStackImpl.makePayment();
+              //   alert(data);
+            }}
           >
-            Pending
-          </span>
+            <FaMoneyCheck />
+            <span className="">Pay now</span>
+          </button>
         )}
       </td>
     </tr>

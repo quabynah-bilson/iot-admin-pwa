@@ -49,7 +49,7 @@ function ClientDashboardPage({ feeds }) {
     const getPaymentInfo = async (uid) => {
       let paymentResponse = await fetch("http://localhost:3000/api/payments", {
         body: { user: uid },
-        // method: "POST",
+        method: "POST",
       });
       let payments = await paymentResponse.json();
       console.log(payments);
@@ -168,7 +168,11 @@ function ClientDashboardPage({ feeds }) {
                         </thead>
                         <tbody className="bg-white">
                           {updatedFeeds.map((value, index) => (
-                            <WasteListItem feed={value} key={index} />
+                            <WasteListItem
+                              feed={value}
+                              showPaymentOption
+                              key={index}
+                            />
                           ))}
                         </tbody>
                       </table>

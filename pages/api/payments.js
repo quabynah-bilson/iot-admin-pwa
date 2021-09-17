@@ -11,6 +11,7 @@ export default async function handler(req, res) {
     return res.status(200).json(data);
   } else {
     let { user } = req.body;
+    console.log(`user => ${user}`);
     // get all payments made by user
     if (user) {
       let snapshots = await db
