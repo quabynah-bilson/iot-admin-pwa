@@ -45,9 +45,6 @@ function AdminDashboardPage({ feeds, users }) {
 
   const pages = ["Users", "Payments"];
 
-  // threshold
-  const threshold = 3.0;
-
   useEffect(() => {
     const getCurrentUserInfo = async () => {
       onAuthStateChanged(getAuth(), async (user) => {

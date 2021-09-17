@@ -3,6 +3,7 @@ export const kApiKey = "PD7E235IZN468BKG";
 export const kUserType = "user-type";
 export const kAdminUserType = "Administrator";
 export const kClientUserType = "Client";
+export const kThresholdValue = 3.0;
 
 // region authentication
 export const kLoginHeader = "Sign in to get started";

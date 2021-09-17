@@ -40,9 +40,6 @@ function ClientDashboardPage({ feeds }) {
 
   const pages = ["My Waste Bin", "History", "Notifications"];
 
-  // threshold
-  const threshold = 3.0;
-
   // check user login status
   useEffect(() => {
     // get payment info for user
@@ -93,6 +90,7 @@ function ClientDashboardPage({ feeds }) {
         <title>{kAppName}</title>
         <meta name="description" content="For a final year project demo" />
         <link rel="icon" href="/favicon.ico" />
+        <meta http-equiv="Refresh" content="30"></meta>
       </Head>
 
       <div className="flex flex-col h-screen w-full xl:px-0 px-6">
