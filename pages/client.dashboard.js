@@ -13,6 +13,7 @@ import LogoutButton from "../components/logout.button";
 import EmptyContent from "../components/empty.content";
 import WasteListItem from "../components/waste.list.item";
 import ItemLoader from "../components/loader";
+import PaymentListItem from "../components/payment.list.item";
 
 export async function getStaticProps(context) {
   // get feeds
@@ -32,6 +33,7 @@ function ClientDashboardPage({ feeds }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [updatedFeeds, setFeeds] = useState(feeds);
+  const [paymentItems, setPaymentItems] = useState([]);
   const [currentUser, setCurrentUser] = useState({
     username: "loading",
     firstName: "",
@@ -41,19 +43,18 @@ function ClientDashboardPage({ feeds }) {
 
   const pages = ["History", "Notifications"];
 
+  // get payment info for user
+  const fetchHistory = async () => {
+    let paymentResponse = await fetch("http://localhost:3000/api/payments", {
+      body: { user: currentUser.id },
+      method: "POST",
+    });
+    let data = await paymentResponse.json();
+    setPaymentItems(data);
+  };
+
   // check user login status
   useEffect(() => {
-    // get payment info for user
-    const getPaymentInfo = async (uid) => {
-      let paymentResponse = await fetch("http://localhost:3000/api/payments", {
-        body: { user: uid },
-        method: "POST",
-      });
-      let data = await paymentResponse.json();
-      console.log(data);
-      //! TODO => show payment info in history tab
-    };
-
     // get current user details
     const getCurrentUserInfo = async () => {
       onAuthStateChanged(getAuth(), async (user) => {
@@ -66,7 +67,7 @@ function ClientDashboardPage({ feeds }) {
           let snapshot = await getDoc(doc(getFirestore(), kUsersRef, user.uid));
           if (snapshot.exists) {
             setCurrentUser(snapshot.data());
-            getPaymentInfo(user.uid);
+            fetchHistory();
           }
         }
       });
@@ -144,10 +145,34 @@ function ClientDashboardPage({ feeds }) {
           )} */}
           {currentPage === 0 && (
             <>
-              <EmptyContent
-                header={"No history found"}
-                subhead={"Your payment history will be displayed here"}
-              />
+              {paymentItems.length ? (
+                <section className="w-full p-6 font-mono">
+                  <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
+                    <div className="w-full overflow-x-auto sm:overflow-x-hidden">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="text-sm font-medium tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
+                            <th className="px-4 py-3">Transaction ID</th>
+                            <th className="px-4 py-3">Amount</th>
+                            <th className="px-4 py-3">Transaction Date</th>
+                            <th className="px-4 py-3">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white">
+                          {paymentItems.map((value, index) => (
+                            <PaymentListItem info={value} key={index} />
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </section>
+              ) : (
+                <EmptyContent
+                  header={"No history found"}
+                  subhead={"Your payment history will be displayed here"}
+                />
+              )}
             </>
           )}
           {currentPage === 1 && (

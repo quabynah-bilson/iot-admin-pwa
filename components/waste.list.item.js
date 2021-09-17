@@ -27,6 +27,7 @@ function WasteListItem({ feed, user, showPaymentOption = false }) {
     amount: 4500,
     currency: "GHS",
     publicKey: kPaystackApiKey,
+    status: "pending",
   };
 
   // called when transaction succeeds/fails

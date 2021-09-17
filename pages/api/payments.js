@@ -21,7 +21,9 @@ export default async function handler(req, res) {
       let data = snapshots.docs.map((doc) => doc.data());
       return res.status(200).json(data);
     } else {
-      return res.status(200).json([]);
+      let snapshots = await db.collection(kPaymentsRef).get();
+      let data = snapshots.docs.map((doc) => doc.data());
+      return res.status(200).json(data);
     }
   }
 }
