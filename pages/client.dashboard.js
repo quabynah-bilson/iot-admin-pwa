@@ -19,6 +19,7 @@ import {
 import { onAuthStateChanged, getAuth } from "firebase/auth";
 import { useRouter } from "next/router";
 import LogoutButton from "../components/logout.button";
+import EmptyContent from "../components/empty.content";
 
 export async function getStaticProps(context) {
   // get feeds
@@ -44,7 +45,7 @@ function ClientDashboardPage({ feeds }) {
   });
   currentUser.fullName = `${currentUser.firstName} ${currentUser.lastName}`;
 
-  const pages = ["Users", "Payments"];
+  const pages = ["My Waste Bin", "History", "Notifications"];
 
   // threshold
   const threshold = 3.0;
@@ -98,7 +99,7 @@ function ClientDashboardPage({ feeds }) {
           </div>
 
           {/* navigation bar */}
-          <div className="bg-white mt-8">
+          <div className="bg-white mt-8 rounded-tr-xl rounded-tl-xl">
             <nav className="flex flex-row">
               {pages.map((value, index) => (
                 <button
@@ -115,6 +116,32 @@ function ClientDashboardPage({ feeds }) {
               ))}
             </nav>
           </div>
+
+          {/* content */}
+          {currentPage === 0 && (
+            <>
+              <EmptyContent
+                header={"You haven't received any updates yet"}
+                subhead={"Updates on your waste level will be displayed here"}
+              />
+            </>
+          )}
+          {currentPage === 1 && (
+            <>
+              <EmptyContent
+                header={"No history found"}
+                subhead={"Your payment history will be displayed here"}
+              />
+            </>
+          )}
+          {currentPage === 2 && (
+            <>
+              <EmptyContent
+                header={"No new notifications"}
+                subhead={"Updates on your waste level will be displayed here"}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

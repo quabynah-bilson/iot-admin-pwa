@@ -20,6 +20,7 @@ import { onAuthStateChanged, getAuth } from "firebase/auth";
 import { useRouter } from "next/router";
 import UserCard from "../components/user.card";
 import LogoutButton from "../components/logout.button";
+import EmptyContent from "../components/empty.content";
 
 export async function getStaticProps(context) {
   // get feeds
@@ -108,7 +109,7 @@ function AdminDashboardPage({ feeds }) {
           </div>
 
           {/* navigation bar */}
-          <div className="bg-white mt-8">
+          <div className="bg-white mt-8 rounded-tr-xl rounded-tl-xl">
             <nav className="flex flex-row">
               {pages.map((value, index) => (
                 <button
@@ -126,34 +127,48 @@ function AdminDashboardPage({ feeds }) {
             </nav>
           </div>
 
-          {/* content */}
-          {currentPage === 0 ? (
+          {/* table of users */}
+          {currentPage === 0 && (
             <>
-              {/* table of users */}
-              <section className="w-full p-6 font-mono">
-                <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
-                  <div className="w-full overflow-x-auto sm:overflow-x-hidden">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="text-sm font-medium tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
-                          <th className="px-4 py-3">Name</th>
-                          <th className="px-4 py-3">Phone</th>
-                          <th className="px-4 py-3">User Type</th>
-                          <th className="px-4 py-3">Created At</th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white">
-                        {users.map((value, index) => (
-                          <UserCard user={value} key={index} />
-                        ))}
-                      </tbody>
-                    </table>
+              {users ? (
+                <section className="w-full p-6 font-mono">
+                  <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
+                    <div className="w-full overflow-x-auto sm:overflow-x-hidden">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="text-sm font-medium tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
+                            <th className="px-4 py-3">Name</th>
+                            <th className="px-4 py-3">Phone</th>
+                            <th className="px-4 py-3">User Type</th>
+                            <th className="px-4 py-3">Created At</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white">
+                          {users.map((value, index) => (
+                            <UserCard user={value} key={index} />
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
-              </section>
+                </section>
+              ) : (
+                <EmptyContent
+                  header={"No users registered so far"}
+                  subhead={"All registered users will appear here"}
+                />
+              )}
             </>
-          ) : (
-            <>{/* table of payments */}</>
+          )}
+
+          {/* table of payments */}
+          {currentPage === 1 && (
+            <>
+              <EmptyContent
+                header={"No history found"}
+                subhead={"Clients' payment history will be displayed here"}
+              />
+            </>
           )}
         </div>
       </div>
