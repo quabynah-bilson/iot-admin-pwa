@@ -39,7 +39,7 @@ function ClientDashboardPage({ feeds }) {
   });
   currentUser.fullName = `${currentUser.firstName} ${currentUser.lastName}`;
 
-  const pages = ["My Waste Bin", "History", "Notifications"];
+  const pages = ["History", "Notifications"];
 
   // check user login status
   useEffect(() => {
@@ -49,8 +49,8 @@ function ClientDashboardPage({ feeds }) {
         body: { user: uid },
         method: "POST",
       });
-      let payments = await paymentResponse.json();
-      console.log(payments);
+      let data = await paymentResponse.json();
+      console.log(data);
       //! TODO => show payment info in history tab
     };
 
@@ -66,7 +66,7 @@ function ClientDashboardPage({ feeds }) {
           let snapshot = await getDoc(doc(getFirestore(), kUsersRef, user.uid));
           if (snapshot.exists) {
             setCurrentUser(snapshot.data());
-            getPaymentInfo(currentUser.uid);
+            getPaymentInfo(user.uid);
           }
         }
       });
@@ -134,15 +134,15 @@ function ClientDashboardPage({ feeds }) {
           </div>
 
           {/* content */}
-          {currentPage === 0 && (
+          {/* {currentPage === 0 && (
             <>
               <EmptyContent
                 header={"You haven't received any updates yet"}
                 subhead={"Updates on your waste level will be displayed here"}
               />
             </>
-          )}
-          {currentPage === 1 && (
+          )} */}
+          {currentPage === 0 && (
             <>
               <EmptyContent
                 header={"No history found"}
@@ -150,7 +150,7 @@ function ClientDashboardPage({ feeds }) {
               />
             </>
           )}
-          {currentPage === 2 && (
+          {currentPage === 1 && (
             <>
               {loading && <ItemLoader />}
 

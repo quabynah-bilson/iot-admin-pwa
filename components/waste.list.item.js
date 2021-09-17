@@ -24,7 +24,7 @@ function WasteListItem({ feed, user, showPaymentOption = false }) {
   const config = {
     reference: new Date().getTime(),
     email: user.email,
-    amount: feed.field1 * 100,
+    amount: 4500,
     currency: "GHS",
     publicKey: kPaystackApiKey,
   };
@@ -59,7 +59,6 @@ function WasteListItem({ feed, user, showPaymentOption = false }) {
   const onClose = () => {
     // implementation for  whatever you want to do when the Paystack dialog closed.
     console.log("closed");
-    alert("Transaction was cancelled");
   };
 
   const initializePayment = usePaystackPayment(config);
