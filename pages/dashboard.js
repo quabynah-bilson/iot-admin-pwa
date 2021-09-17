@@ -143,6 +143,7 @@ function AdminDashboardPage({ feeds, users }) {
                 <EmptyContent
                   header={"No users registered so far"}
                   subhead={"All registered users will appear here"}
+                  onRefresh={() => router.push("/dashboard")}
                 />
               )}
             </>
