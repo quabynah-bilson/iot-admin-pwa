@@ -16,6 +16,8 @@ export const kRegisterSubHead =
 // region firebase
 export const kProjectName = "iot-admin-pwa";
 export const kUsersRef = "users";
+export const kPaymentsRef = "payments";
+export const kClientWasteTopic = "client-waste";
 export const kMessagingPublicKey =
   "BGBzUsOJBUykFn2VtdKSDMiPMO4_4Gx9xE7Wf03k5NkAyUGSepeoUZVe2S0_8cuw_b5F3GDEO0tMBamN3JQN_Y4";
 

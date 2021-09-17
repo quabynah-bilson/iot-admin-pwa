@@ -7,15 +7,8 @@ import {
   kUsersRef,
   kUserType,
 } from "../utils/constants";
-import { getToken, getMessaging } from "firebase/messaging";
-import {
-  getDocs,
-  getDoc,
-  doc,
-  getFirestore,
-  collection,
-  query,
-} from "firebase/firestore/lite";
+
+import { getDoc, doc, getFirestore } from "firebase/firestore/lite";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
 import { useRouter } from "next/router";
 import UserCard from "../components/user.card";
@@ -24,22 +17,25 @@ import EmptyContent from "../components/empty.content";
 
 export async function getStaticProps(context) {
   // get feeds
-  let response = await fetch("http://localhost:3000/api/feeds");
-  let feeds = await response.json();
+  let feedsResponse = await fetch("http://localhost:3000/api/feeds");
+  let feeds = await feedsResponse.json();
   console.log(feeds);
 
+  // get users
+  let usersResponse = await fetch("http://localhost:3000/api/users");
+  let users = await usersResponse.json();
+
   return {
-    props: { feeds },
+    props: { feeds, users },
   };
 }
 
-function AdminDashboardPage({ feeds }) {
+function AdminDashboardPage({ feeds, users }) {
   // router
   const router = useRouter();
 
   // states
   const [currentPage, setCurrentPage] = useState(0);
-  const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState({
     username: "loading",
     firstName: "",
@@ -53,15 +49,6 @@ function AdminDashboardPage({ feeds }) {
   const threshold = 3.0;
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      // get users
-      let snapshots = await getDocs(
-        query(collection(getFirestore(), kUsersRef))
-      );
-      let data = snapshots.docs.map((doc) => doc.data()) || [];
-      setUsers(data);
-    };
-
     const getCurrentUserInfo = async () => {
       onAuthStateChanged(getAuth(), async (user) => {
         if (
@@ -79,7 +66,7 @@ function AdminDashboardPage({ feeds }) {
     };
 
     getCurrentUserInfo();
-    fetchUsers();
+
     return null;
   }, []);
 
