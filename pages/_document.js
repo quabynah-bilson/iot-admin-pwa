@@ -1,6 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
-class IotDocument extends Document {
+export default class IotDocument extends Document {
   render() {
     return (
       <Html>
@@ -17,5 +17,3 @@ class IotDocument extends Document {
     );
   }
 }
-
-export default IotDocument;

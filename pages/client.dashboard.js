@@ -104,13 +104,17 @@ function ClientDashboardPage({ feeds }) {
         "Your waste bin is full. Navigate to the notifications tab to make payments for the garbage collection. Thank you"
       );
     return null;
-  }, [feeds]);
+  }, [feeds, router]);
 
   // update feeds
   const updateFeeds = async () => {
     setLoading(true);
     // get feeds
-    let response = await fetch("http://localhost:3000/api/feeds");
+    let response = await fetch(
+      process.env.NODE_ENV === "production"
+        ? "/api/feeds"
+        : "http://localhost:3000/api/feeds"
+    );
     let data = await response.json();
     setFeeds(data);
     setLoading(false);
@@ -122,7 +126,6 @@ function ClientDashboardPage({ feeds }) {
         <title>{kAppName}</title>
         <meta name="description" content="For a final year project demo" />
         <link rel="icon" href="/favicon.ico" />
-        {/* TODO -> enable this */}
         {/* <meta http-equiv="Refresh" content="30"></meta> */}
       </Head>
 

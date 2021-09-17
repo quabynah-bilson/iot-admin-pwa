@@ -8,7 +8,7 @@ import {
   collection,
   getFirestore,
 } from "firebase/firestore";
-import { kPaymentsRef } from "../utils/constants";
+import { kPaymentPendingState, kPaymentsRef } from "../utils/constants";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -17,9 +17,14 @@ function MyApp({ Component, pageProps }) {
         query(collection(getFirestore(), kPaymentsRef)),
         (snapshot) => {
           snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-              console.log("new item added to payments");
-              // toast("New request received from a client");
+            console.log(change);
+            if (
+              change.type === "modified" &&
+              change.doc.exists &&
+              change.doc.data()["status"] === kPaymentPendingState
+            ) {
+              // console.log("new item added to payments");
+              toast("New request received from a client");
             }
           });
         }

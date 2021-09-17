@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import ItemLoader from "../components/loader";
 import { kAppName } from "../utils/constants";
-import { currentUser } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import "firebase/auth";
 import { useRouter } from "next/dist/client/router";
 
@@ -12,10 +12,9 @@ export default function Home() {
   const router = useRouter();
 
   // called when page is first loaded
-  useEffect(async () => {
+  useEffect(() => {
     // check user authentication state
-
-    if (currentUser) router.push("/dashboard");
+    if (getAuth().currentUser) router.push("/dashboard");
     else router.push("/login");
   }, []);
 

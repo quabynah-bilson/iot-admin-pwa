@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import {
   kAdminUserType,
@@ -23,24 +22,8 @@ import UserCard from "../components/user.card";
 import LogoutButton from "../components/logout.button";
 import EmptyContent from "../components/empty.content";
 import PaymentListItem from "../components/payment.list.item";
-import { ToastContainer, toast } from "react-toastify";
 
-export async function getStaticProps(context) {
-  // get feeds
-  let feedsResponse = await fetch("http://localhost:3000/api/feeds");
-  let feeds = await feedsResponse.json();
-  console.log(feeds);
-
-  // get users
-  let usersResponse = await fetch("http://localhost:3000/api/users");
-  let users = await usersResponse.json();
-
-  return {
-    props: { feeds, users },
-  };
-}
-
-function AdminDashboardPage({ feeds, users }) {
+function AdminDashboardPage({ users }) {
   // router
   const router = useRouter();
 
@@ -85,7 +68,7 @@ function AdminDashboardPage({ feeds, users }) {
     getCurrentUserInfo();
 
     return null;
-  }, []);
+  }, [router]);
 
   return (
     <div className="min-h-screen w-screen bg-background">
@@ -95,17 +78,6 @@ function AdminDashboardPage({ feeds, users }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <div className="flex flex-col h-screen w-full xl:px-0 px-6">
         <div className="flex-1 h-full max-w-6xl mx-auto w-full py-8">
           <div className="flex flex-row justify-between items-center">

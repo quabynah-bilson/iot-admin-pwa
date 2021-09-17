@@ -1,41 +1,38 @@
-const withPWA = require("next-pwa");
-const webpack = require("webpack");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const { NODE_ENV, ANALYSE, CONFIG_ENV } = process.env;
+const withOffline = require("next-offline");
 
-module.exports = withPWA({
-  pwa: {
-    disable: NODE_ENV !== "production",
-    dest: "public",
-    register: true,
-    skipWaiting: true,
-    dest: ".next",
-    sw: "sw.js",
-    // https://developers.google.com/web/tools/workbox/modules/workbox-strategies
+const nextConfig = {
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
+  target: "serverless",
+
+  transformManifest: (manifest) => ["/"].concat(manifest), // add the homepage to the cache
+
+  // Trying to set NODE_ENV=production when running yarn dev causes a build-time error so we turn on the SW in dev mode so that we can actually test it
+  generateInDevMode: true,
+
+  workboxOpts: {
+    swDest: "static/service-worker.js",
     runtimeCaching: [
       {
-        handler: "NetworkFirst",
         urlPattern: /^https?.*/,
-      },
-      {
         handler: "NetworkFirst",
-        urlPattern: /\/_next\/.*/,
+        options: {
+          cacheName: "https-calls",
+          networkTimeoutSeconds: 15,
+          expiration: {
+            maxEntries: 150,
+            maxAgeSeconds: 30 * 24 * 60 * 60, // 1 month
+          },
+          cacheableResponse: {
+            statuses: [0, 200],
+          },
+        },
       },
     ],
   },
-  // buildId, dev, isServer, defaultLoaders, webpack
-  webpack: (config, { dev }) => {
-    if (ANALYSE) {
-      // https://www.npmjs.com/package/webpack-bundle-analyzer
-      config.plugins.push(new BundleAnalyzerPlugin());
-    }
-    config.plugins.push(
-      // Define global constants which are configured at compile time
-      // https://webpack.js.org/plugins/define-plugin/
-      new webpack.DefinePlugin({
-        __CONFIG__: JSON.stringify(CONFIG_ENV),
-      })
-    );
-    return config;
-  },
-});
+};
+
+module.exports = withOffline(nextConfig);
