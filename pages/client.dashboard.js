@@ -26,24 +26,14 @@ import ItemLoader from "../components/loader";
 import PaymentListItem from "../components/payment.list.item";
 import { ToastContainer, toast } from "react-toastify";
 
-export async function getStaticProps(context) {
-  // get feeds
-  let response = await fetch("http://localhost:3000/api/feeds");
-  let feeds = await response.json();
-
-  return {
-    props: { feeds },
-  };
-}
-
-function ClientDashboardPage({ feeds }) {
+function ClientDashboardPage() {
   // router
   const router = useRouter();
 
   // states
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [updatedFeeds, setFeeds] = useState(feeds);
+  const [updatedFeeds, setFeeds] = useState([]);
   const [paymentItems, setPaymentItems] = useState([]);
   const [currentUser, setCurrentUser] = useState({
     username: "loading",
@@ -92,6 +82,7 @@ function ClientDashboardPage({ feeds }) {
           if (snapshot.exists) {
             setCurrentUser(snapshot.data());
             fetchHistory();
+            updateFeeds();
           }
         }
       });
@@ -99,25 +90,21 @@ function ClientDashboardPage({ feeds }) {
 
     getCurrentUserInfo();
 
-    if (feeds.length)
-      toast(
-        "Your waste bin is full. Navigate to the notifications tab to make payments for the garbage collection. Thank you"
-      );
     return null;
-  }, [feeds, router]);
+  }, [router]);
 
   // update feeds
   const updateFeeds = async () => {
     setLoading(true);
     // get feeds
-    let response = await fetch(
-      process.env.NODE_ENV === "production"
-        ? "/api/feeds"
-        : "http://localhost:3000/api/feeds"
-    );
+    let response = await fetch("/api/feeds");
     let data = await response.json();
     setFeeds(data);
     setLoading(false);
+    if (updateFeeds.length)
+      toast(
+        "Your waste bin is full. Navigate to the notifications tab to make payments for the garbage collection. Thank you"
+      );
   };
 
   return (
