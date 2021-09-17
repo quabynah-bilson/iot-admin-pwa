@@ -14,6 +14,7 @@ import EmptyContent from "../components/empty.content";
 import WasteListItem from "../components/waste.list.item";
 import ItemLoader from "../components/loader";
 import PaymentListItem from "../components/payment.list.item";
+import { ToastContainer, toast } from "react-toastify";
 
 export async function getStaticProps(context) {
   // get feeds
@@ -74,8 +75,13 @@ function ClientDashboardPage({ feeds }) {
     };
 
     getCurrentUserInfo();
+
+    if (feeds.length)
+      toast(
+        "Your waste bin is full. Navigate to the notifications tab to make payments for the garbage collection. Thank you"
+      );
     return null;
-  }, []);
+  }, [feeds]);
 
   // update feeds
   const updateFeeds = async () => {
@@ -98,6 +104,17 @@ function ClientDashboardPage({ feeds }) {
       </Head>
 
       <div className="flex flex-col h-screen w-full xl:px-0 px-6">
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <div className="flex-1 h-full max-w-6xl mx-auto w-full py-8">
           <div className="flex flex-row justify-between items-center">
             {/* page details */}
@@ -155,7 +172,7 @@ function ClientDashboardPage({ feeds }) {
                             <th className="px-4 py-3">Transaction ID</th>
                             <th className="px-4 py-3">Amount</th>
                             <th className="px-4 py-3">Transaction Date</th>
-                            <th className="px-4 py-3">Status</th>
+                            <th className="px-4 py-3">Waste Status</th>
                           </tr>
                         </thead>
                         <tbody className="bg-white">

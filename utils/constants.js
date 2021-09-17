@@ -3,6 +3,8 @@ export const kApiKey = "PD7E235IZN468BKG";
 export const kUserType = "user-type";
 export const kAdminUserType = "Administrator";
 export const kClientUserType = "Client";
+export const kPaymentPendingState = "pending";
+export const kPaymentCompletedState = "collected";
 export const kThresholdValue = 3.0;
 
 // region authentication

@@ -2,7 +2,11 @@ import { format, parseISO } from "date-fns";
 import { FaMoneyCheck } from "react-icons/fa";
 import { GiCheckMark } from "react-icons/gi";
 import { usePaystackPayment } from "react-paystack";
-import { kPaymentsRef, kPaystackApiKey } from "../utils/constants";
+import {
+  kPaymentPendingState,
+  kPaymentsRef,
+  kPaystackApiKey,
+} from "../utils/constants";
 import {
   doc,
   getFirestore,
@@ -14,6 +18,7 @@ import {
 } from "firebase/firestore/lite";
 import { onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 // list item for waste
 function WasteListItem({ feed, user, showPaymentOption = false }) {
@@ -27,7 +32,6 @@ function WasteListItem({ feed, user, showPaymentOption = false }) {
     amount: 4500,
     currency: "GHS",
     publicKey: kPaystackApiKey,
-    status: "pending",
   };
 
   // called when transaction succeeds/fails
@@ -46,8 +50,9 @@ function WasteListItem({ feed, user, showPaymentOption = false }) {
           client: user.id,
           transaction: reference.transaction,
           created_at: new Date().getTime(),
-          amount: feed.field1,
+          amount: 45.0,
           feed_id: feed.entry_id,
+          status: kPaymentPendingState,
         },
         { merge: true }
       );
@@ -85,47 +90,60 @@ function WasteListItem({ feed, user, showPaymentOption = false }) {
   }, []);
 
   return (
-    <tr className="text-gray-700 cursor-pointer">
-      <td className="px-4 py-3 border">
-        <div className="flex items-center text-sm">
-          <p className="font-semibold text-black">{feed.entry_id}</p>
-        </div>
-      </td>
-      <td className="px-4 py-3 text-sm border"> {feed.field1} </td>
-      <td className="px-4 py-3 text-sm border">
-        <div className="flex items-center">
-          <div>
-            <p className="font-semibold text-black">
-              {format(parseISO(feed.created_at), "MM/dd/yyyy")}
-            </p>
-            <p className="text-xs text-gray-600">
-              {format(parseISO(feed.created_at), "pp")}
-            </p>
+    <>
+      {/* <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      /> */}
+      <tr className="text-gray-700 cursor-pointer">
+        <td className="px-4 py-3 border">
+          <div className="flex items-center text-sm">
+            <p className="font-semibold text-black">{feed.entry_id}</p>
           </div>
-        </div>
-      </td>
-      <td className="px-4 py-3 text-xs border">
-        {showPaymentOption &&
-          (!hasPaid ? (
-            <button
-              className="flex flex-row items-center space-x-2 px-6 py-2 border-2 border-primary font-semibold text-primary rounded-full cursor-pointer"
-              onClick={() => {
-                if (confirm(`Proceed with payment of GHC${feed.field1}?`)) {
-                  initializePayment(onSuccess, onClose);
-                }
-              }}
-            >
-              <FaMoneyCheck />
-              <span className="">Pay now</span>
-            </button>
-          ) : (
-            <button className="flex flex-row items-center space-x-2 px-6 py-2 border-2 border-green-200 bg-green-200 font-semibold text-green-600 rounded-full cursor-pointer">
-              <GiCheckMark />
-              <span className="">Paid already</span>
-            </button>
-          ))}
-      </td>
-    </tr>
+        </td>
+        <td className="px-4 py-3 text-sm border"> {feed.field1} </td>
+        <td className="px-4 py-3 text-sm border">
+          <div className="flex items-center">
+            <div>
+              <p className="font-semibold text-black">
+                {format(parseISO(feed.created_at), "MM/dd/yyyy")}
+              </p>
+              <p className="text-xs text-gray-600">
+                {format(parseISO(feed.created_at), "pp")}
+              </p>
+            </div>
+          </div>
+        </td>
+        <td className="px-4 py-3 text-xs border">
+          {showPaymentOption &&
+            (!hasPaid ? (
+              <button
+                className="flex flex-row items-center space-x-2 px-6 py-2 border-2 border-primary font-semibold text-primary rounded-full cursor-pointer"
+                onClick={() => {
+                  if (confirm(`Proceed with payment of GHC45?`)) {
+                    initializePayment(onSuccess, onClose);
+                  }
+                }}
+              >
+                <FaMoneyCheck />
+                <span className="">Pay now</span>
+              </button>
+            ) : (
+              <button className="flex flex-row items-center space-x-2 px-6 py-2 border-2 border-green-200 bg-green-200 font-semibold text-green-600 rounded-full cursor-pointer">
+                <GiCheckMark />
+                <span className="">Paid already</span>
+              </button>
+            ))}
+        </td>
+      </tr>
+    </>
   );
 }
 

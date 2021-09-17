@@ -14,6 +14,9 @@ import { useRouter } from "next/router";
 import UserCard from "../components/user.card";
 import LogoutButton from "../components/logout.button";
 import EmptyContent from "../components/empty.content";
+import ItemLoader from "../components/loader";
+import PaymentListItem from "../components/payment.list.item";
+import { ToastContainer, toast } from "react-toastify";
 
 export async function getStaticProps(context) {
   // get feeds
@@ -35,6 +38,7 @@ function AdminDashboardPage({ feeds, users }) {
   const router = useRouter();
 
   // states
+  const [paymentItems, setPaymentItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [currentUser, setCurrentUser] = useState({
     username: "loading",
@@ -44,6 +48,13 @@ function AdminDashboardPage({ feeds, users }) {
   currentUser.fullName = `${currentUser.firstName} ${currentUser.lastName}`;
 
   const pages = ["Users", "Payments"];
+
+  // get payment info for user
+  const fetchHistory = async () => {
+    let paymentResponse = await fetch("http://localhost:3000/api/payments");
+    let data = await paymentResponse.json();
+    setPaymentItems(data);
+  };
 
   useEffect(() => {
     const getCurrentUserInfo = async () => {
@@ -57,6 +68,7 @@ function AdminDashboardPage({ feeds, users }) {
           let snapshot = await getDoc(doc(getFirestore(), kUsersRef, user.uid));
           if (snapshot.exists) {
             setCurrentUser(snapshot.data());
+            fetchHistory();
           }
         }
       });
@@ -74,6 +86,18 @@ function AdminDashboardPage({ feeds, users }) {
         <meta name="description" content="For a final year project demo" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="flex flex-col h-screen w-full xl:px-0 px-6">
         <div className="flex-1 h-full max-w-6xl mx-auto w-full py-8">
           <div className="flex flex-row justify-between items-center">
@@ -149,10 +173,38 @@ function AdminDashboardPage({ feeds, users }) {
           {/* table of payments */}
           {currentPage === 1 && (
             <>
-              <EmptyContent
-                header={"No history found"}
-                subhead={"Clients' payment history will be displayed here"}
-              />
+              {paymentItems.length ? (
+                <section className="w-full p-6 font-mono">
+                  <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
+                    <div className="w-full overflow-x-auto sm:overflow-x-hidden">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="text-sm font-medium tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
+                            <th className="px-4 py-3">Transaction ID</th>
+                            <th className="px-4 py-3">Amount</th>
+                            <th className="px-4 py-3">Transaction Date</th>
+                            <th className="px-4 py-3">Waste Status</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white">
+                          {paymentItems.map((value, index) => (
+                            <PaymentListItem
+                              allowClick
+                              info={value}
+                              key={index}
+                            />
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </section>
+              ) : (
+                <EmptyContent
+                  header={"No history found"}
+                  subhead={"Your payment history will be displayed here"}
+                />
+              )}
             </>
           )}
         </div>

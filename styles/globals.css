@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&family=Rubik&family=Open+Sans&display=swap");
+@import url("react-toastify/dist/ReactToastify.css");
 
 /* loader */
 .loader,

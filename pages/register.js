@@ -17,6 +17,7 @@ import { doc, getFirestore, setDoc } from "firebase/firestore/lite";
 import { useRouter } from "next/router";
 import { RiAdminLine } from "react-icons/ri";
 import { MdSupervisorAccount } from "react-icons/md";
+import { ToastContainer, toast } from "react-toastify";
 
 export const accountTypes = [
   {
@@ -50,13 +51,13 @@ function CreateAccountPage() {
   const createUser = async (e) => {
     e.preventDefault();
     if (email === "") {
-      alert("Email address is required");
+      toast("Email address is required");
     } else if (password === "") {
-      alert("Password is required");
+      toast("Password is required");
     } else if (lastName === "") {
-      alert("Last name is required");
+      toast("Last name is required");
     } else if (firstName === "") {
-      alert("First name is required");
+      toast("First name is required");
     } else {
       try {
         setLoading(true);
@@ -88,11 +89,11 @@ function CreateAccountPage() {
           else router.push("/client.dashboard");
         } else {
           setLoading(false);
-          alert(`An error occurred. ${error.message}`);
+          toast(`An error occurred. ${error.message}`);
         }
       } catch (error) {
         setLoading(false);
-        alert(`An error occurred. ${error.message}`);
+        toast(`An error occurred. ${error.message}`);
       }
     }
   };
@@ -104,6 +105,17 @@ function CreateAccountPage() {
         <meta name="description" content="For a final year project demo" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       {loading ? (
         <>
           <ItemLoader />
