@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import LogoutButton from "../components/logout.button";
 import EmptyContent from "../components/empty.content";
 import WasteListItem from "../components/waste.list.item";
+import ItemLoader from "../components/loader";
 
 export async function getStaticProps(context) {
   // get feeds
@@ -91,7 +92,8 @@ function ClientDashboardPage({ feeds }) {
         <title>{kAppName}</title>
         <meta name="description" content="For a final year project demo" />
         <link rel="icon" href="/favicon.ico" />
-        <meta http-equiv="Refresh" content="30"></meta>
+        {/* TODO -> enable this */}
+        {/* <meta http-equiv="Refresh" content="30"></meta> */}
       </Head>
 
       <div className="flex flex-col h-screen w-full xl:px-0 px-6">
