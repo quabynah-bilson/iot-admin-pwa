@@ -73,7 +73,7 @@ function ClientDashboardPage() {
     const getCurrentUserInfo = async () => {
       onAuthStateChanged(getAuth(), async (user) => {
         if (
-          !user ||
+          !user &&
           localStorage.getItem(kUserType) !== kClientUserType.toLowerCase()
         )
           router.push("/");

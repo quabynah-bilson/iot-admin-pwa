@@ -10,6 +10,7 @@ import {
 
 import {
   getDoc,
+  getDocs,
   doc,
   getFirestore,
   collection,
@@ -23,12 +24,13 @@ import LogoutButton from "../components/logout.button";
 import EmptyContent from "../components/empty.content";
 import PaymentListItem from "../components/payment.list.item";
 
-function AdminDashboardPage({ users }) {
+function AdminDashboardPage() {
   // router
   const router = useRouter();
 
   // states
   const [paymentItems, setPaymentItems] = useState([]);
+  const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [currentUser, setCurrentUser] = useState({
     username: "loading",
@@ -48,10 +50,16 @@ function AdminDashboardPage({ users }) {
   };
 
   useEffect(() => {
+    const getAllUsers = async () => {
+      let snapshots = await getDocs(collection(getFirestore(), kUsersRef));
+      let data = snapshots.docs.map((doc) => doc.data());
+      setUsers(data);
+    };
+
     const getCurrentUserInfo = async () => {
       onAuthStateChanged(getAuth(), async (user) => {
         if (
-          !user ||
+          !user &&
           localStorage.getItem(kUserType) !== kAdminUserType.toLowerCase()
         )
           router.push("/");
@@ -66,7 +74,7 @@ function AdminDashboardPage({ users }) {
     };
 
     getCurrentUserInfo();
-
+    getAllUsers();
     return null;
   }, [router]);
 
