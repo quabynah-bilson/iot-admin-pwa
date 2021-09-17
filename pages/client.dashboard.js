@@ -50,6 +50,7 @@ function ClientDashboardPage({ feeds }) {
       });
       let payments = await paymentResponse.json();
       console.log(payments);
+      //! TODO => show payment info in history tab
     };
 
     // get current user details
@@ -168,6 +169,7 @@ function ClientDashboardPage({ feeds }) {
                           {updatedFeeds.map((value, index) => (
                             <WasteListItem
                               feed={value}
+                              user={currentUser}
                               showPaymentOption
                               key={index}
                             />
