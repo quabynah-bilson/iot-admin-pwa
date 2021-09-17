@@ -1,9 +1,10 @@
 import Image from "next/image";
-import { format, formatDistance, formatRelative, subDays } from "date-fns";
+import { format } from "date-fns";
+import { kClientUserType } from "../utils/constants";
 
 function UserCard({ user }) {
   return (
-    <tr className="text-gray-700">
+    <tr className="text-gray-700 cursor-pointer">
       <td className="px-4 py-3 border">
         <div className="flex items-center text-sm">
           <div className="relative w-8 h-8 mr-3 rounded-full md:block">
@@ -30,7 +31,7 @@ function UserCard({ user }) {
       <td className="px-4 py-3 text-xs border">
         <span
           className={`${
-            user.userType === "customer"
+            user.userType === kClientUserType.toLowerCase()
               ? "text-secondary bg-secondary"
               : "text-primary bg-primary"
           } px-2 py-1 font-semibold leading-tight rounded-sm bg-opacity-10`}

@@ -1,15 +1,25 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { kAppName, kUsersRef } from "../utils/constants";
+import {
+  kAdminUserType,
+  kAppName,
+  kUsersRef,
+  kUserType,
+} from "../utils/constants";
 import { getToken, getMessaging } from "firebase/messaging";
 import {
   getDocs,
+  getDoc,
+  doc,
   getFirestore,
   collection,
   query,
 } from "firebase/firestore/lite";
+import { onAuthStateChanged, getAuth } from "firebase/auth";
+import { useRouter } from "next/router";
 import UserCard from "../components/user.card";
+import LogoutButton from "../components/logout.button";
 
 export async function getStaticProps(context) {
   // get feeds
@@ -23,9 +33,18 @@ export async function getStaticProps(context) {
 }
 
 function AdminDashboardPage({ feeds }) {
+  // router
+  const router = useRouter();
+
   // states
   const [currentPage, setCurrentPage] = useState(0);
   const [users, setUsers] = useState([]);
+  const [currentUser, setCurrentUser] = useState({
+    username: "loading",
+    firstName: "",
+    lastName: "",
+  });
+  currentUser.fullName = `${currentUser.firstName} ${currentUser.lastName}`;
 
   const pages = ["Users", "Payments"];
 
@@ -42,6 +61,23 @@ function AdminDashboardPage({ feeds }) {
       setUsers(data);
     };
 
+    const getCurrentUserInfo = async () => {
+      onAuthStateChanged(getAuth(), async (user) => {
+        if (
+          !user ||
+          localStorage.getItem(kUserType) !== kAdminUserType.toLowerCase()
+        )
+          router.push("/");
+        else {
+          let snapshot = await getDoc(doc(getFirestore(), kUsersRef, user.uid));
+          if (snapshot.exists) {
+            setCurrentUser(snapshot.data());
+          }
+        }
+      });
+    };
+
+    getCurrentUserInfo();
     fetchUsers();
     return null;
   }, []);
@@ -55,10 +91,21 @@ function AdminDashboardPage({ feeds }) {
       </Head>
       <div className="flex flex-col h-screen w-full xl:px-0 px-6">
         <div className="flex-1 h-full max-w-6xl mx-auto w-full py-8">
-          <h1 className="text-4xl">Overview</h1>
-          <span className="text-gray-700">
-            View all users &amp; payments made
-          </span>
+          <div className="flex flex-row justify-between items-center">
+            {/* page details */}
+            <div className="flex flex-col">
+              <h1 className="text-4xl">Overview</h1>
+              <span className="text-gray-700">
+                View all users &amp; payments made
+              </span>
+            </div>
+
+            {/* user details */}
+            <LogoutButton
+              fullName={currentUser.fullName}
+              avatar={currentUser.avatar}
+            />
+          </div>
 
           {/* navigation bar */}
           <div className="bg-white mt-8">
