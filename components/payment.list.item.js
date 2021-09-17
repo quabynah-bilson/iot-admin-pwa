@@ -18,8 +18,9 @@ function PaymentListItem({ info, allowClick }) {
             confirm("Do you wish to mark this item as collected?")
           ) {
             let db = getFirestore();
+            console.log({ ...info, status: kPaymentCompletedState });
             await setDoc(
-              doc(db, kPaymentsRef, info.id),
+              doc(db, kPaymentsRef, info.transaction),
               { ...info, status: kPaymentCompletedState },
               { merge: true }
             );
