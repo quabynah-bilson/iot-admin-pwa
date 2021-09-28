@@ -97,7 +97,7 @@ function ClientDashboardPage() {
   const updateFeeds = async () => {
     setLoading(true);
     // get feeds
-    let response = await fetch("/api/feeds");
+    let response = await fetch("http://localhost:3000/api/feeds");
     let data = await response.json();
     setFeeds(data);
     setLoading(false);

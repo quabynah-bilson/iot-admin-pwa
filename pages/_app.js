@@ -17,7 +17,6 @@ function MyApp({ Component, pageProps }) {
         query(collection(getFirestore(), kPaymentsRef)),
         (snapshot) => {
           snapshot.docChanges().forEach((change) => {
-            console.log(change);
             if (
               change.type === "modified" &&
               change.doc.exists &&
